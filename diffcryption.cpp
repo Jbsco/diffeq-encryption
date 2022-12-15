@@ -6,11 +6,10 @@
 using namespace std;
 
 string encode(string &input){
-    // encryption matrix
     int A[4][4]={{14,12,26,15},
                  { 8, 0, 7, 8},
                  { 6,13,20, 7},
-                 { 7,18,25, 8}};
+                 { 7,18,25, 8}}; // encryption matrix
     int i=0, // iteration index
         j=0, // row index
         k=0, // column index
@@ -35,33 +34,25 @@ string encode(string &input){
     memset(C,0,sizeof(C)); // initialize to 0
     int limit=columns*4*4; // set iteration limit based on columns
     i=0,j=0,k=0; // reset indices
-    // dotProduct, find [C] for [A][P]=[C]
-    while(limit){
+    while(limit){ // dotProduct, find [C] for [A][P]=[C]
         C[i][j]+=A[i][k]*P[k][j]; // accumulate C[i][j] while moving through A rows and P columns
-        // k++ moves A right, P down
-        // j++ moves C right, P right
-        // i++ moves C down, A down
-        k++;
-        if(k==4) C[i][j]%=27,j++,k=0; // C[i][j] complete, mod 27, increment P column, C column, reset k
-        if(j==columns) i++,j=0; // C row complete, increment C row, A row, reset j
+        k++; // k++ moves A right, P down
+        if(k==4) C[i][j]%=27,j++,k=0; // C[i][j] complete, mod 27, j++ moves C & P right, reset k
+        if(j==columns) i++,j=0; // C row complete, i++ moves C & A down, reset j
         limit--; // decrement limit count
     }
     j=0; // reset row index
     k=0; // reset column index
     string result; // create string to populate with encoded characters
     for(i=0;i<columns*4;i++){
-        // all values of C must be checked with modulo 27
-        // if %27 is 0 append space to result string
-        if(C[j][k]==0) result.push_back(' ');
-        // else append C modulo 27, plus 64 (to get ASCII character value)
-        else result.push_back(C[j][k]+64); 
+        if(!C[j][k]) result.push_back(' '); // if C[j][k] is 0 append space to result string
+        else result.push_back(C[j][k]+64); // else append C modulo 27, plus 64 (to get ASCII character value)
         j++; // increment row index
         if(j==4){ // if row index increments to 4
             j=0; // reset row index to 0
             k++; // increment column index
         }
     }
-    // test print array contents
     cout << "\narray P:\n"; // header
     for(i=0;i<4;i++){
         for(j=0;j<columns;j++){
@@ -88,11 +79,10 @@ string encode(string &input){
 }
 
 string decode(string &input){
-    // decryption matrix
     int A[4][4]={{ 9,19,18,26},
                  {24,26,25, 5},
                  { 2, 2, 3,22},
-                 {23, 3, 3, 2}};
+                 {23, 3, 3, 2}}; // decryption matrix
     int i=0, // iteration index
         j=0, // row index
         k=0, // column index
@@ -117,33 +107,25 @@ string decode(string &input){
     memset(C,0,sizeof(C)); // initialize to 0
     int limit=columns*4*4; // set iteration limit based on columns
     i=0,j=0,k=0; // reset indices
-    // dotProduct, find [C] for [A][P]=[C]
-    while(limit){
+    while(limit){ // dotProduct, find [C] for [A][P]=[C]
         C[i][j]+=A[i][k]*P[k][j]; // accumulate C[i][j] while moving through A rows and P columns
-        // k++ moves A right, P down
-        // j++ moves C right, P right
-        // i++ moves C down, A down
-        k++;
-        if(k==4) C[i][j]%=27,j++,k=0; // C[i][j] complete, mod 27, increment P column, C column, reset k
-        if(j==columns) i++,j=0; // C row complete, increment C row, A row, reset j
+        k++; // k++ moves A right, P down
+        if(k==4) C[i][j]%=27,j++,k=0; // C[i][j] complete, mod 27, j++ moves C & P right, reset k
+        if(j==columns) i++,j=0; // C row complete, i++ moves C & A down, reset j
         limit--; // decrement limit count
     }
     j=0; // reset row index
     k=0; // reset column index
     string result; // create string to populate with encoded characters
     for(i=0;i<columns*4;i++){
-        // all values of C must be checked with modulo 27
-        // if %27 is 0 append space to result string
-        if(C[j][k]==0) result.push_back(' ');
-        // else append C modulo 27, plus 64 (to get ASCII character value)
-        else result.push_back((C[j][k])+64);
+        if(!C[j][k]) result.push_back(' '); // if C[j][k] is 0 append space to result string
+        else result.push_back(C[j][k]+64); // else append C modulo 27, plus 64 (to get ASCII character value)
         j++; // increment row index
         if(j==4){ // if row index increments to 4
             j=0; // reset row index to 0
             k++; // increment column index
         }
     }
-    // test print array contents
     cout << "\narray P:\n"; // header
     for(i=0;i<4;i++){
         for(j=0;j<columns;j++){
@@ -181,3 +163,16 @@ int main(){
     }
     return 0;
 }
+/*
+
+IXBWSZBCRYCCZEVB
+NHFGL MRZGTYOHGH
+
+1234567890
+abcdefghij
+1234567890
+klmnopqrst
+123456
+uvwxyz
+
+*/
